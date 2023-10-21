@@ -1,0 +1,22 @@
+<div [ngStyle]="chartContainer()" class="chart-container">
+  <div
+    *ngFor="let datapercent of dataheight; let i = index"
+    class="columnPosition"
+    [ngStyle]="columnStyle(datapercent, i + 1)"
+  >
+    <label class="column" [ngStyle]="columnWidth()"></label>
+    <div class="left-text" [ngStyle]="columnWidth()">
+      {{ data[i][fieldName] }}
+    </div>
+    <div class="bottom-text" [ngStyle]="columnWidth()">
+      {{ date[i] }}
+    </div>
+  </div>
+  <div
+    class="columnPosition average"
+    [ngStyle]="columnStyle(averageH, data?.length)"
+  >
+    <div class="left-text">{{ average }}</div>
+  </div>
+</div>
+<ng-content></ng-content>

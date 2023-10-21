@@ -1,0 +1,87 @@
+<div class="content-container">
+  <nz-card [nzHoverable]="true">
+    <div class="row mb-1">
+      <span class="col-4">Tổng chi các trường: </span>
+      <nz-select
+        class="col-8"
+        nzMode="multiple"
+        nzPlaceHolder="Chọn mục"
+        [(ngModel)]="pickedfield"
+        (ngModelChange)="onPickField($event)"
+      >
+        <nz-option
+          *ngFor="let field of varfield"
+          [nzLabel]="field"
+          [nzValue]="field"
+        ></nz-option>
+        <!-- <nz-option
+      *ngFor="let option of defaultOption"
+      [nzLabel]="option"
+      [nzValue]="option"
+      nzHide
+    ></nz-option> -->
+      </nz-select>
+    </div>
+
+    <div class="header-select row">
+      <div class="col-8">
+        <div class="row p-3" *ngFor="let x of pickedmonth; let i = index">
+          <span class="col-2">Bảng số {{ i + 1 }}:</span>
+          <nz-date-picker
+            class="col-8 date-picker"
+            nzMode="month"
+            [(ngModel)]="pickedmonth[i]"
+            (ngModelChange)="onPickDate($event)"
+          ></nz-date-picker>
+          <button class="col-2 delete-choose" (click)="removeChoose(i)">
+            <i class="bi bi-x-square"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="row p-3">
+          <span class="col-4">Thêm tháng:</span>
+          <nz-date-picker
+            class="col-8"
+            nzMode="month"
+            [(ngModel)]="newDate"
+            (ngModelChange)="onNewDate($event)"
+          ></nz-date-picker>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+
+  <br />
+
+  <div class="row">
+    <ng-container *ngIf="tongchi?.length">
+      <app-column-chart
+        class="col-6"
+        *ngFor="let data of tongchi; let i = index"
+        [data]="data"
+        [height]="300"
+        [width]="600"
+      >
+        <label
+          >Biểu đồ chi tiêu {{ pickedfield }} tháng
+          {{ pickedmonth[i].getMonth() + 1 }} năm
+          {{ pickedmonth[i].getFullYear() }}</label
+        ></app-column-chart
+      >
+    </ng-container>
+  </div>
+
+  <!-- <app-column-chart
+    class="row"
+    *ngIf="tongchi?.length"
+    [data]="tongchi"
+    [height]="400"
+    [width]="800"
+  >
+    <label
+      >Biểu đồ Tổng chi tháng {{ pickedmonth!.getMonth() + 1 }} năm
+      {{ this.pickedmonth?.getFullYear() }}</label
+    ></app-column-chart
+  > -->
+</div>

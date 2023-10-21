@@ -1,0 +1,40 @@
+.fan {
+  width: 300px;
+  padding-bottom: 300px; /* Tạo hình tròn bằng cách đặt độ phần trăm này giống nhau cho width và height */
+  background-color: white;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0.8;
+}
+.blade-root {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  transform-origin: 0 50%;
+
+  position: absolute;
+}
+.blade {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transform-origin: 0 50%;
+}
+.fanlabel {
+  position: absolute;
+  bottom: 10%;
+  z-index: 10;
+  color: white;
+  text-shadow: 0 0 3px #000;
+}
+
+.diagonal-div {
+  width: 200px;
+  height: 200px;
+  background-color: #007bff;
+  position: relative;
+}

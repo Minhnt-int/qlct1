@@ -1,0 +1,69 @@
+<form [formGroup]="form">
+  <div class="row m-2 p-2" *ngFor="let f of field">
+    <!-- <span class="col-4">{{ f.text }}</span>
+    <input
+      class="col"
+      nz-input
+      [placeholder]="f.text"
+      [formControlName]="f.text"
+    /> -->
+    <!-- <app-data-show [field]="f" (valueRes)="(valueRes)"></app-data-show> -->
+    <ng-container
+      *ngTemplateOutlet="input; context: { field: f }"
+    ></ng-container>
+    <ng-template #input let-field="field" let-value="value">
+      <nz-form-label [nzSpan]="8">{{
+        field.text == "date" ? "Ngày" : field.text
+      }}</nz-form-label>
+      <nz-form-control
+        [nzSpan]="16"
+        nzErrorTip="Input is required"
+        [ngSwitch]="field.fieldtype"
+      >
+        <ng-container *ngSwitchCase="'text'">
+          <input
+            style="width: 100%"
+            nz-input
+            name="required"
+            [placeholder]="field.text"
+            [formControlName]="field.text"
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'number'">
+          <input
+            style="width: 100%"
+            nz-input
+            name="required"
+            type="number"
+            [placeholder]="field.text"
+            [formControlName]="field.text"
+            autofocus
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'date'">
+          <nz-date-picker
+            name="required"
+            style="width: 100%"
+            [nzFormat]="'dd/MM/yyyy'"
+            [formControlName]="field.text"
+          ></nz-date-picker>
+        </ng-container>
+      </nz-form-control>
+    </ng-template>
+  </div>
+  <button (click)="handleCancel()" nz-button nzType="default" nzShape="round">
+    <!-- <span nz-icon nzType="download"></span> -->
+    Hủy
+  </button>
+  <button
+    [nzLoading]="loading"
+    (click)="handleOk()"
+    nz-button
+    type="submit"
+    nzType="primary"
+    nzShape="round"
+  >
+    <!-- <span nz-icon nzType="download"></span> -->
+    {{ editdata ? "Sửa" : "Thêm" }}
+  </button>
+</form>

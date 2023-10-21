@@ -1,0 +1,81 @@
+<nz-spin nzTip="Loading..." [nzSpinning]="status === 'loading'">
+  {{ status }}
+  <div class="row">
+    <div class="col">
+      <app-column-chart
+        class="row"
+        [data]="tongchithang"
+        [height]="400"
+        [width]="800"
+      >
+        <label
+          >Biểu đồ Tổng chi tháng {{ now!.getMonth() + 1 }} năm
+          {{ this.now?.getFullYear() }} (tổng: {{ tongchithang.length }})</label
+        ></app-column-chart
+      >
+    </div>
+    <div class="justify-content-between d-flex">
+      <nz-range-picker
+        class="radius-1"
+        [(ngModel)]="date"
+        (ngModelChange)="filter()"
+      ></nz-range-picker>
+      <button
+        class=""
+        nz-button
+        nzType="primary"
+        nzShape="round"
+        (click)="addnewData()"
+      >
+        <i class="bi bi-plus-circle me-2"></i>
+        Thêm
+      </button>
+    </div>
+
+    <nz-table
+      #fixedTable
+      [nzPageSize]="5"
+      [nzData]="filterData"
+      [nzScroll]="{ x: '1000px', y: '280px' }"
+    >
+      <thead>
+        <tr>
+          <ng-container *ngFor="let f of field">
+            <th [nzRight]="f.main">
+              {{ f.text == "date" ? "Ngày" : f.text }} ( {{ f.unit }} )
+            </th>
+          </ng-container>
+          <!-- <th *ngFor="let f of field">{{ f.text }} ( {{ f.unit }} )</th> -->
+          <th nzRight>Tổng chi</th>
+          <th nzRight>
+            <a style="font-size: 20px" (click)="editfield()"
+              ><i class="bi bi-gear-fill"></i
+            ></a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of fixedTable.data; let i = index">
+          <td nzBreakWord *ngFor="let f of field" [nzRight]="f.main">
+            <!-- {{
+              f.fieldtype == "date"
+                ? (data[f.text] | date : "dd/MM/yyyy")
+                : data[f.text]
+            }} -->
+            {{ f.main ? (data[f.text] | date : "dd/MM/yyyy") : data[f.text] }}
+          </td>
+          <td nzRight>{{ tongchi[i] }}</td>
+          <td nzRight>
+            <a (click)="editData(data, data.id)"
+              ><span nz-icon nzType="edit" nzTheme="outline"></span
+            ></a>
+            <a (click)="delData(data.id)" class="ms-3">
+              <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-spin>
+<button (click)="click()">click</button>

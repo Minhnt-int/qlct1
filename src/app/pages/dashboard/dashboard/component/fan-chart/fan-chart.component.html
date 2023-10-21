@@ -1,0 +1,12 @@
+<div class="fan">
+  <div
+    class="blade-root"
+    *ngFor="let blade of fanfield; let i = index"
+    [ngStyle]="fancurrent(blade, i)"
+  >
+    <label class="fanlabel" [ngStyle]="fancurrentReverse(blade, i)">
+      {{ blade }}%
+    </label>
+    <div class="blade" [ngStyle]="fanpercent(blade, i)"></div>
+  </div>
+</div>

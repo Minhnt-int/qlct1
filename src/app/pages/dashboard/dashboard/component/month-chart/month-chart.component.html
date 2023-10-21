@@ -1,0 +1,68 @@
+<!-- <div class="content-container">
+  <nz-card class="header-select" [nzHoverable]="true">
+    <div class="row m-2">
+      <span class="col-4">Chọn tháng: </span>
+      <nz-date-picker
+        class="col-8"
+        nzMode="month"
+        [(ngModel)]="pickedmonth"
+        (ngModelChange)="onPickDate($event)"
+      ></nz-date-picker>
+    </div>
+
+    <div class="row m-2">
+      <span class="col-4">Chọn các trường: </span>
+      <nz-select
+        class="col-8"
+        [nzPlaceHolder]="'Chọn mục'"
+        nzMode="multiple"
+        nzPlaceHolder="Inserted are removed"
+        [(ngModel)]="pickedfield"
+        (ngModelChange)="onPickField($event)"
+      >
+        <nz-option
+          *ngFor="let field of varfield"
+          [nzLabel]="field"
+          [nzValue]="field"
+        ></nz-option>
+      </nz-select>
+    </div>
+  </nz-card>
+
+  <br />
+
+  <div class="row">
+    <ng-container *ngIf="monthData?.length">
+      <app-column-chart
+        class="col-6"
+        *ngFor="let field of pickedfield"
+        [data]="monthData"
+        [fieldName]="field"
+        [height]="300"
+        [width]="600"
+      >
+        <label
+          >Biểu đồ chi tiêu {{ field }} tháng
+          {{ pickedmonth!.getMonth() + 1 }} năm
+          {{ this.pickedmonth?.getFullYear() }}</label
+        ></app-column-chart
+      >
+    </ng-container>
+  </div>
+
+  <app-column-chart
+    class="row"
+    *ngIf="tongchi?.length"
+    [data]="tongchi"
+    [height]="400"
+    [width]="800"
+  >
+    <label
+      >Biểu đồ tổng {{ pickedfield }} tháng
+      {{ pickedmonth!.getMonth() + 1 }} năm
+      {{ this.pickedmonth?.getFullYear() }}</label
+    ></app-column-chart
+  >
+</div> -->
+
+<app-line-chart></app-line-chart>
