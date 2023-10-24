@@ -69,9 +69,13 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   initAxis() {
     this.x = d3Scale.scaleTime().range([0, this.width]);
-    this.y = d3Scale.scaleLinear().range([this.height, 0]);
+    let low = D3.min(STOCKS, (d) => d.low);
+    let high = D3.max(STOCKS, (d) => d.high);
+    this.y = D3.scaleLog()
+      .domain([low ? low : 0, high ? high : 0])
+      .rangeRound([this.height, this.margin.top]);
     this.x.domain(d3Array.extent(STOCKS, (d) => d.date));
-    this.y.domain(d3Array.extent(STOCKS, (d) => d.value));
+    // this.y.domain(d3Array.extent(STOCKS, (d) => d.value));
   }
 
   drawAxis() {
@@ -95,15 +99,45 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   drawLine() {
-    this.line = d3Shape
-      .line()
-      .x((d: any) => this.x(d.date))
-      .y((d: any) => this.y(d.value));
+    // this.line = d3Shape
+    //   .line()
+    //   .x((d: any) => this.x(d.date))
+    //   .y((d: any) => this.y(d.value));
 
-    this.svg
-      .append('path')
-      .datum(STOCKS)
-      .attr('class', 'line')
-      .attr('d', this.line);
+    // this.svg
+    //   .append('path')
+    //   .datum(STOCKS)
+    //   .attr('class', 'line')
+    //   .attr('d', this.line);
+
+    let g = this.svg
+      .append('g')
+      .attr('stroke-linecap', 'round')
+      .attr('stroke', 'black')
+      .selectAll('g')
+      .data(STOCKS)
+      .join('g')
+      .attr(
+        'transform',
+        (d: any) => `translate(${this.x(d.date) ? this.x(d.date) : 0},0)`
+      );
+
+    console.log(g);
+
+    g.append('line')
+      .attr('y1', (d: any) => this.y(d.low))
+      .attr('y2', (d: any) => this.y(d.high));
+
+    g.append('line')
+      .attr('y1', (d: any) => this.y(d.open))
+      .attr('y2', (d: any) => this.y(d.close))
+      .attr('stroke-width', 10)
+      .attr('stroke', (d: any) =>
+        d.open > d.close
+          ? D3.schemeSet1[0]
+          : d.close > d.open
+          ? D3.schemeSet1[2]
+          : D3.schemeSet1[8]
+      );
   }
 }
