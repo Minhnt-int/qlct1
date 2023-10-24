@@ -129,7 +129,15 @@ export class CthnComponent implements OnInit {
     this.setMonthData();
   }
   click() {
-    this.syncData();
+    const newWindow = window.open(
+      'https://www.google.com/',
+      'newWindow',
+      'width=500, height=600'
+    );
+    window.addEventListener('message', (event) => {
+      // Handle the message received from the child window
+      console.log('Message from Child Window:', event.data);
+    });
   }
 
   monthData: any;

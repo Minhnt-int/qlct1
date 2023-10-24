@@ -20,6 +20,11 @@ export class AppComponent implements OnInit {
       this.isCollapsed = true;
     }, 1000);
   }
+  @HostListener('document:mousedown', ['$event'])
+  onClick(event: any) {
+    // console.log(event.srcElement.nodeName);
+    console.log(event.srcElement);
+  }
   isCollapsed = true;
 
   constructor(private store: Store<AppState>) {}

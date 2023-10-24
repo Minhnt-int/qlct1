@@ -1,6 +1,14 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  OnInit,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 import * as d3 from 'd3-selection';
+import * as D3 from 'd3';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 import * as d3Array from 'd3-array';
@@ -14,16 +22,16 @@ import { STOCKS } from 'src/app/models/stocks';
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.scss'],
 })
-export class LineChartComponent {
+export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
   title = 'Line Chart';
 
-  private margin = { top: 20, right: 20, bottom: 30, left: 50 };
-  private width: number;
-  private height: number;
-  private x: any;
-  private y: any;
-  private svg: any;
-  private line?: d3Shape.Line<[number, number]>;
+  margin = { top: 20, right: 20, bottom: 30, left: 50 };
+  width: number;
+  height: number;
+  x: any;
+  y: any;
+  svg: any;
+  line?: d3Shape.Line<[number, number]>;
 
   constructor() {
     this.width = 900 - this.margin.left - this.margin.right;
@@ -35,11 +43,23 @@ export class LineChartComponent {
     this.initAxis();
     this.drawAxis();
     this.drawLine();
+
+    console.log(this.svg);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    // this.initSvg();
+    // this.initAxis();
+    // this.drawAxis();
+    // this.drawLine();
+  }
+  svg1: any;
+  ngAfterViewInit(): void {
+    console.log(this.margin);
   }
 
-  private initSvg() {
+  initSvg() {
     this.svg = d3
-      .select('svg')
+      .select('#svg')
       .append('g')
       .attr(
         'transform',
@@ -47,14 +67,14 @@ export class LineChartComponent {
       );
   }
 
-  private initAxis() {
+  initAxis() {
     this.x = d3Scale.scaleTime().range([0, this.width]);
     this.y = d3Scale.scaleLinear().range([this.height, 0]);
     this.x.domain(d3Array.extent(STOCKS, (d) => d.date));
     this.y.domain(d3Array.extent(STOCKS, (d) => d.value));
   }
 
-  private drawAxis() {
+  drawAxis() {
     this.svg
       .append('g')
       .attr('class', 'axis axis--x')
@@ -74,7 +94,7 @@ export class LineChartComponent {
       .text('Price ($)');
   }
 
-  private drawLine() {
+  drawLine() {
     this.line = d3Shape
       .line()
       .x((d: any) => this.x(d.date))
