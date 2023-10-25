@@ -32,7 +32,10 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
   y: any;
   svg: any;
   line?: d3Shape.Line<[number, number]>;
-
+  xAxis: any;
+  yAxis: any;
+  chartContainer: any;
+  g: any;
   constructor() {
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
@@ -43,7 +46,7 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
     this.initAxis();
     this.drawAxis();
     this.drawLine();
-
+    this.initZoom();
     console.log(this.svg);
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -52,23 +55,31 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
     // this.drawAxis();
     // this.drawLine();
   }
-  svg1: any;
   ngAfterViewInit(): void {
     console.log(this.margin);
   }
-
   initSvg() {
-    this.svg = d3
-      .select('#svg')
+    this.svg = d3.select('#svg');
+
+    this.g = this.svg
       .append('g')
       .attr(
         'transform',
         'translate(' + this.margin.left + ',' + this.margin.top + ')'
       );
+
+    this.chartContainer = this.g.append('g').attr('class', 'chart-container');
+    console.log(this.chartContainer, this.svg);
+
+    // svg.selectAll(".bars rect").attr("x", d => x(d.letter)).attr("width", x.bandwidth());
   }
 
   initAxis() {
     this.x = d3Scale.scaleTime().range([0, this.width]);
+    // this.x = D3.scaleBand()
+    //   .domain(D3.sort(ticker, (d) => -d.close).map((d) => d.date.toISOString()))
+    //   .range([this.margin.left, this.width])
+    //   .padding(0.1);
     let low = D3.min(ticker, (d) => d.low);
     let high = D3.max(ticker, (d) => d.high);
     this.y = D3.scaleLog()
@@ -79,16 +90,18 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   drawAxis() {
-    this.svg
+    this.xAxis = d3Axis.axisBottom(this.x);
+    this.g
       .append('g')
       .attr('class', 'axis axis--x')
       .attr('transform', 'translate(0,' + this.height + ')')
-      .call(d3Axis.axisBottom(this.x));
+      .call(this.xAxis);
 
-    this.svg
+    this.yAxis = d3Axis.axisLeft(this.y);
+    this.g
       .append('g')
       .attr('class', 'axis axis--y')
-      .call(d3Axis.axisLeft(this.y))
+      .call(this.yAxis)
       .append('text')
       .attr('class', 'axis-title')
       .attr('transform', 'rotate(-90)')
@@ -104,7 +117,7 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
       .x((d: any) => this.x(d.date))
       .y((d: any) => this.y(d.close));
 
-    let g = this.svg
+    let g = this.chartContainer
       .append('g')
       .attr('stroke-linecap', 'round')
       .attr('stroke', 'black')
@@ -123,7 +136,7 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
     g.append('line')
       .attr('y1', (d: any) => this.y(d.open))
       .attr('y2', (d: any) => this.y(d.close))
-      .attr('stroke-width', 3)
+      .attr('stroke-width', 4)
       .attr('stroke', (d: any) =>
         d.open > d.close
           ? D3.schemeSet1[0]
@@ -132,11 +145,43 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
           : D3.schemeSet1[8]
       );
 
-    this.svg
+    this.chartContainer
       .append('path')
       .datum(ticker)
       .attr('class', 'line')
       .attr('d', this.line)
       .style('stroke-width', 3);
+  }
+  initZoom() {
+    const extent: [[number, number], [number, number]] = [
+      [this.margin.left, this.margin.top],
+      [
+        this.width + this.margin.right + this.margin.left,
+        this.height + this.margin.bottom + this.margin.top,
+      ],
+    ];
+    console.log(this.height, this.margin.bottom, this.margin.top);
+
+    this.svg.call(
+      D3.zoom()
+        .scaleExtent([1, 8])
+        .translateExtent(extent)
+        .extent(extent)
+        .on('zoom', (event) => {
+          console.log(event.transform);
+          this.x.range([0, this.width].map((d) => event.transform.applyX(d)));
+          this.g.select('.axis--x').call(this.xAxis);
+
+          let low = D3.min(ticker, (d) => d.low);
+          let high = D3.max(ticker, (d) => d.high);
+          console.log(this.y);
+
+          this.y.range([0, this.width].map((d) => event.transform.applyY(d)));
+
+          // this.y.range([0, this.height].map((d) => event.transform.applyX(d)));
+          this.g.select('.axis--y').call(this.yAxis);
+          this.chartContainer.attr('transform', event.transform);
+        })
+    );
   }
 }
