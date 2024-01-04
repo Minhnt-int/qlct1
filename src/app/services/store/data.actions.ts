@@ -50,7 +50,7 @@ export const editdataSuccess = createAction(
   EDITDATA_SUCCESS,
   props<{ data: any }>()
 );
-export const adddata = createAction(ADDDATA, props<{ data: any }>());
+export const adddata = createAction(ADDDATA, props<any>());
 export const adddataSuccess = createAction(
   ADDDATA_SUCCESS,
   props<{ data: any }>()

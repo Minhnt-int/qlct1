@@ -1,4 +1,8 @@
-import { getdatas, getfield } from './../../../services/store/data.actions';
+import {
+  adddata,
+  getdatas,
+  getfield,
+} from './../../../services/store/data.actions';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, combineLatest, interval, of } from 'rxjs';
@@ -92,7 +96,8 @@ export class CthnComponent implements OnInit {
     //   };
     //   console.log(Timestamp.fromDate(date), Timestamp.now());
 
-    //   this.service.addData(expense).subscribe(() => console.log('yes'));
+    //   // this.service.addData(expense).subscribe(() => console.log('yes'));
+    //   this.store.dispatch(adddata(expense));
 
     //   // Kiểm tra nếu đã thêm đủ 300 bản ghi thì dừng interval
     //   if (i >= 300) {

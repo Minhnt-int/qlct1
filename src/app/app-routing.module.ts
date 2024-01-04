@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TestComponent } from './pages/test/test/test.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/cthn' },
@@ -15,10 +14,6 @@ const routes: Routes = [
       import('./pages/dashboard/dashboard/dashboard.module').then(
         (m) => m.DashboardModule
       ),
-  },
-  {
-    path: 'test',
-    component: TestComponent,
   },
 ];
 

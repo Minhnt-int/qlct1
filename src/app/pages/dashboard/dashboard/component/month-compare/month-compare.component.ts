@@ -39,6 +39,7 @@ export class MonthCompareComponent {
     this.pickedmonth.push(new Date());
     this.getField();
     this.getData();
+    console.log(this.field, this.data);
   }
   removeChoose(index: number) {
     if (this.pickedmonth.length > 1) this.pickedmonth.splice(index, 1);

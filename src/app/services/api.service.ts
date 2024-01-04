@@ -1,4 +1,3 @@
-import { Post } from './../pages/test/test/post.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 

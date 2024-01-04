@@ -41,6 +41,8 @@ export const datareducer = createReducer(
         // date: item.date,
       };
     });
+    console.log(datas);
+
     return {
       ...state,
       items: listdata,
